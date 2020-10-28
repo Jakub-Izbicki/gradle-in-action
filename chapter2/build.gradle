@@ -1,0 +1,55 @@
+////// 1.
+task hello1 {
+	doLast {
+		println "hello world"		
+	}
+}
+
+// << as a shortcut for doLast() has been removed in gradle 5.0
+// task hello2 << {
+	// println "do last hello world"
+// }
+
+
+////// 2.
+task startSession {
+	doLast {
+		chant()
+	}
+}
+
+def chant() {
+	ant.echo(message: 'chanting..')
+}
+
+3.times {
+	task "shout$it" {
+		doLast {
+			println "Shouted: [$it]"			
+		}
+	}
+}
+
+// dependencies tasks will be run first
+shout0.dependsOn startSession
+shout2.dependsOn shout0, shout1
+
+task therapy(dependsOn: shout2)	
+
+
+////// 3.
+
+// run tasks with abbreviated camel case names e.g.: gradle runMyCode -> gradle rMC
+// -x to smart exclude tasks e.g.: gradle task1 -x task5
+// use -D to provide system property to gradle's jvm process: -Dname=value
+// use -P to pass a project property to build script: -Pname=value
+// -i change gradle logger to INFO lvl
+// -s do not abbreviate stacktraces when printing them
+// gradle properties: to display properties
+
+// gradle daemon - on by default since gradle 3; run in the background after 
+// first gradle run and is used in future builds to skip need to 
+// bootstrap new jvm process each time build is run
+
+
+
